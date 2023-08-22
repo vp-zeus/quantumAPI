@@ -14,7 +14,7 @@ class VenueSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class WalkInSerializer(serializers.ModelSerializer):
-    role = RoleSerializer(many=True)
+    roles = RoleSerializer(many=True)
     venue = VenueSerializer()
     class Meta:
         model = WalkIn

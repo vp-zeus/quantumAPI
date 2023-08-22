@@ -69,7 +69,7 @@ class WalkIn(BaseModel):
     instructions = models.TextField()
     min_sys_requirements = models.TextField()
     venue = models.ForeignKey(Venue,on_delete=models.CASCADE,related_name='walk_ins')
-    role = models.ManyToManyField(Role,related_name='walk_ins')
+    roles = models.ManyToManyField(Role,related_name='walk_ins')
 
     def __str__(self):
         return self.name
