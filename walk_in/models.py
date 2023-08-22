@@ -1,3 +1,4 @@
+from lib2to3.pytree import Base
 from django.db import models
 
 # Create your models here.
@@ -12,17 +13,29 @@ class BaseModel(models.Model):
 class Degree(BaseModel):
     name = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.name
+
 class Stream(BaseModel):
     name = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.name
+
 class Skill(BaseModel):
     name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
 
 class Role(BaseModel):
     name = models.CharField(max_length=45,blank=False)
     compensation = models.CharField(max_length=45)
     description = models.TextField()
     requirements = models.TextField()
+
+    def __str__(self):
+        return self.name
 
 class College(BaseModel):
     name = models.TextField(blank=False)
@@ -31,6 +44,9 @@ class College(BaseModel):
     city = models.CharField(max_length=45)
     state = models.CharField(max_length=45)
     pincode = models.CharField(max_length=45)
+
+    def __str__(self):
+        return self.name
     
 
 class Venue(BaseModel):
@@ -41,8 +57,20 @@ class Venue(BaseModel):
     state = models.CharField(max_length=45)
     pincode = models.CharField(max_length=45)
 
-class User(BaseModel):
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    email = models.CharField(max_length=100)
-    password = models.CharField(max_length=500)
+    def __str__(self):
+        return self.name
+
+class WalkIn(BaseModel):
+    name = models.TextField(blank=False)
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
+    application_last_date = models.DateTimeField()
+    general_instructions = models.TextField()
+    instructions = models.TextField()
+    min_sys_requirements = models.TextField()
+    venue = models.ForeignKey(Venue,on_delete=models.CASCADE,related_name='walk_ins')
+    role = models.ManyToManyField(Role,related_name='walk_ins')
+
+    def __str__(self):
+        return self.name
+
