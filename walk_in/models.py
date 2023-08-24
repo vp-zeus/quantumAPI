@@ -60,6 +60,12 @@ class Venue(BaseModel):
     def __str__(self):
         return self.name
 
+
+class TimeSlot(models.Model):
+    slot = models.TimeField()
+
+
+
 class WalkIn(BaseModel):
     name = models.TextField(blank=False)
     start_date = models.DateTimeField()
@@ -70,7 +76,9 @@ class WalkIn(BaseModel):
     min_sys_requirements = models.TextField()
     venue = models.ForeignKey(Venue,on_delete=models.CASCADE,related_name='walk_ins')
     roles = models.ManyToManyField(Role,related_name='walk_ins')
+    available_time_slots = models.ManyToManyField(TimeSlot,related_name="walk_ins")
 
     def __str__(self):
         return self.name
+
 
