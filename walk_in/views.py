@@ -7,12 +7,12 @@ from .models import WalkIn, Venue
 
 # Create your views here.
 
+
 class WalkInViewSet(ReadOnlyModelViewSet):
     serializer_class = WalkInSerializer
     queryset = WalkIn.objects.all()
-    permission_classes = [IsAuthenticated]
 
-class VenueViewSet(mixins.RetrieveModelMixin,GenericViewSet):
+
+class VenueViewSet(mixins.RetrieveModelMixin, GenericViewSet):
     serializer_class = VenueSerializer
     queryset = Venue.objects.all()
-
