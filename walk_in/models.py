@@ -1,4 +1,6 @@
+from lib2to3.pytree import Base
 from django.db import models
+
 
 # Create your models here.
 
@@ -9,13 +11,6 @@ class BaseModel(models.Model):
 
     class Meta:
         abstract = True
-
-
-class Skill(BaseModel):
-    name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.name
 
 
 class Role(BaseModel):
@@ -41,7 +36,11 @@ class Venue(BaseModel):
 
 
 class TimeSlot(models.Model):
-    slot = models.TimeField()
+    slot_start_time = models.TimeField()
+    slot_end_time = models.TimeField()
+
+    def __str__(self):
+        return "{start_time} - {end_time}".format(start_time=self.slot_start_time.strftime("%H:%M:%S"), end_time=self.slot_end_time.strftime("%H:%M:%S"))
 
 
 class WalkIn(BaseModel):
@@ -60,3 +59,15 @@ class WalkIn(BaseModel):
 
     def __str__(self):
         return self.name
+
+
+class Application(BaseModel):
+    profile = models.ForeignKey(
+        "users.Profile", on_delete=models.CASCADE, related_name="applications", null=True)
+    walk_in = models.ForeignKey(
+        WalkIn, on_delete=models.CASCADE, related_name="applications")
+    preferred_time_slot = models.ForeignKey(
+        TimeSlot, on_delete=models.CASCADE, related_name="applications")
+
+    def __str__(self):
+        return self.profile.first_name

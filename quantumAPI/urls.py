@@ -16,8 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path, include
-from walk_in.views import WalkInViewSet, VenueViewSet
-from users.views import ProfileView
+from walk_in.views import WalkInViewSet, VenueViewSet, ApplicationView
+from users.views import ProfileView, UserView
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
@@ -31,5 +31,7 @@ urlpatterns = [
     path('api/token', TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path('api/token/refresh', TokenRefreshView.as_view(), name="token_refresh"),
     path('api/profile', ProfileView.as_view(), name="Profile"),
+    path('api/register', UserView.as_view(), name="User"),
+    path("api/walkin/application", ApplicationView.as_view(), name="Application"),
     re_path(r'^', include(router.urls))
 ]

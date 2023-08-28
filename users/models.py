@@ -1,4 +1,3 @@
-from lib2to3.pytree import Base
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import gettext as _
@@ -28,7 +27,10 @@ class Profile(BaseModel):
     portfolio_URL = models.TextField(blank=True)
     preferred_roles = models.ManyToManyField(Role, related_name='users')
     referral = models.TextField(blank=True)
-    mail_list = models.BooleanField(blank=True)
+    mail_list = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.first_name
 
 
 class Degree(BaseModel):
@@ -39,6 +41,13 @@ class Degree(BaseModel):
 
 
 class Stream(BaseModel):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+
+class Skill(BaseModel):
     name = models.CharField(max_length=100)
 
     def __str__(self):
@@ -66,5 +75,24 @@ class EducationalQualification(BaseModel):
         Stream, on_delete=models.CASCADE, related_name="educational_qualifications")
     college = models.ForeignKey(
         College, on_delete=models.CASCADE, related_name="educational_qualifications")
-    user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="educational_qualifications")
+    profile = models.ForeignKey(
+        Profile, on_delete=models.CASCADE, related_name="educational_qualifications")
+
+
+class ProfessionalQualification(BaseModel):
+    type = models.CharField(max_length=45)
+    experience = models.IntegerField(null=True, blank=True)
+    current_ctc = models.CharField(blank=True, max_length=45)
+    expected_ctc = models.CharField(blank=True, max_length=45)
+    other_skills = models.TextField(blank=True)
+    on_notice_period = models.BooleanField()
+    notice_period_end = models.DateField(blank=True, null=True)
+    notice_period_duration = models.IntegerField(null=True, blank=True)
+    applied_recently = models.BooleanField()
+    applied_role = models.TextField(blank=True)
+    profile = models.OneToOneField(
+        Profile, on_delete=models.CASCADE)
+    expert_skills = models.ManyToManyField(
+        Skill, related_name="expert_skills", blank=True)
+    familiar_skills = models.ManyToManyField(
+        Skill, related_name="familiar_skills")
