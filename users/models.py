@@ -75,8 +75,8 @@ class EducationalQualification(BaseModel):
         Stream, on_delete=models.CASCADE, related_name="educational_qualifications")
     college = models.ForeignKey(
         College, on_delete=models.CASCADE, related_name="educational_qualifications")
-    profile = models.ForeignKey(
-        Profile, on_delete=models.CASCADE, related_name="educational_qualifications")
+    profile = models.OneToOneField(
+        Profile, on_delete=models.CASCADE, related_name="educational_qualification")
 
 
 class ProfessionalQualification(BaseModel):
@@ -91,8 +91,8 @@ class ProfessionalQualification(BaseModel):
     applied_recently = models.BooleanField()
     applied_role = models.TextField(blank=True)
     profile = models.OneToOneField(
-        Profile, on_delete=models.CASCADE)
+        Profile, on_delete=models.CASCADE, related_name="professional_qualification")
     expert_skills = models.ManyToManyField(
-        Skill, related_name="expert_skills", blank=True)
+        Skill, related_name="expert_skills", blank=True, null=True)
     familiar_skills = models.ManyToManyField(
         Skill, related_name="familiar_skills")
