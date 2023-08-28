@@ -1,10 +1,12 @@
+from email.mime import application
 from django.shortcuts import render
 from rest_framework import mixins
 from rest_framework.views import APIView
 from rest_framework.viewsets import ReadOnlyModelViewSet, GenericViewSet
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .serializers import WalkInSerializer, VenueSerializer
+from rest_framework.parsers import JSONParser
+from .serializers import ApplicationSerializer, WalkInSerializer, VenueSerializer
 from .models import Application, WalkIn, Venue
 
 # Create your views here.
@@ -22,11 +24,15 @@ class VenueViewSet(mixins.RetrieveModelMixin, GenericViewSet):
 
 class ApplicationView(APIView):
     permission_classes = [IsAuthenticated]
+    parser_classes = [JSONParser]
 
     def post(self, request, format=None):
-        print(request.data.dict())
-        application_dict = {k: int(v) for k, v in request.data.dict().items()}
-        print(application_dict)
-        a = Application(**application_dict)
-        a.save()
-        return Response("hit")
+        serializer = ApplicationSerializer(data=request.data)
+        profile = request.user.profile
+        serializer.is_valid(raise_exception=True)
+
+        application = serializer.save(profile=profile)
+
+        response = ApplicationSerializer(application)
+
+        return Response(response.data)

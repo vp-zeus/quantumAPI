@@ -33,8 +33,6 @@ class ProfileView(APIView):
 
     def get(self, request, format=None):
         user = ProfileSerializer(request.user.profile)
-        profile = request.user.profile
-        education = profile.educational_qualification
         return Response(user.data)
 
 
