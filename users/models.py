@@ -24,7 +24,7 @@ class Profile(BaseModel):
     first_name = models.TextField()
     last_name = models.TextField()
     phone = models.CharField(max_length=20)
-    portfolio_URL = models.TextField(blank=True)
+    portfolio_url = models.TextField(blank=True)
     preferred_roles = models.ManyToManyField(Role, related_name='users')
     referral = models.TextField(blank=True)
     mail_list = models.BooleanField(default=False)
