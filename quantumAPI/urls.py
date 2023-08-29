@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path, include
+from django.conf.urls.static import static
+from django.conf import settings
 from walk_in.views import WalkInViewSet, VenueViewSet, ApplicationView
 from users.views import ProfileView, UserView
 from rest_framework.routers import DefaultRouter
@@ -34,4 +36,4 @@ urlpatterns = [
     path('api/register', UserView.as_view(), name="User"),
     path("api/walkin/application", ApplicationView.as_view(), name="Application"),
     re_path(r'^', include(router.urls))
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

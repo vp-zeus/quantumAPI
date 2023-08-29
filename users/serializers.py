@@ -1,4 +1,5 @@
 from dataclasses import field
+import profile
 from urllib import request
 from rest_framework import serializers
 from walk_in.models import Role
@@ -64,6 +65,10 @@ class ProfileSerializer(serializers.ModelSerializer):
     
     professional_qualification = ProfessionalQualificationSerializer(read_only=True)
 
+    profile_pic = serializers.ImageField()
+
+    resume = serializers.FileField()
+
     class Meta:
         model = Profile
         fields = '__all__'
@@ -87,7 +92,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     @atomic
     def create(self, validated_data):
-        data = self.context['request'].data
+        data = self.context['data']
         profile_data = data.pop('profile')
         educational_data = profile_data.pop('educational_qualification')
         professional_data = profile_data.pop('professional_qualification')

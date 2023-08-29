@@ -1,8 +1,17 @@
+from distutils.command.upload import upload
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import gettext as _
 from walk_in.models import Role, BaseModel
 from .managers import CustomUserManager
+
+
+def upload_to(instance, filename):
+    return 'images/{filename}'.format(filename=filename)
+
+
+def file_upload_to(instance, filename):
+    return 'files/{filename}'.format(filename=filename)
 
 
 class User(AbstractUser, BaseModel):
@@ -28,6 +37,8 @@ class Profile(BaseModel):
     preferred_roles = models.ManyToManyField(Role, related_name='users')
     referral = models.TextField(blank=True)
     mail_list = models.BooleanField(default=False)
+    profile_pic = models.ImageField(upload_to=upload_to, blank=True, null=True)
+    resume = models.FileField(upload_to=file_upload_to, blank=True, null=True)
 
     def __str__(self):
         return self.first_name
