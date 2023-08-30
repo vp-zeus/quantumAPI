@@ -18,14 +18,19 @@ from django.contrib import admin
 from django.urls import path, re_path, include
 from django.conf.urls.static import static
 from django.conf import settings
-from walk_in.views import WalkInViewSet, VenueViewSet, ApplicationView
-from users.views import ProfileView, UserView
+from walk_in.views import CollegeViewSet, DegreeeViewSet, RoleViewSet, StreamViewSet, WalkInViewSet, VenueViewSet, ApplicationView, ApplicationDetailView
+from users.views import ProfileView, SkillViewSet, UserView
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 router = DefaultRouter()
 router.register(r'api/walkin', WalkInViewSet, basename="WalkIn")
 router.register(r'api/venue', VenueViewSet, basename="Venue")
+router.register(r'api/role', RoleViewSet, basename="Role")
+router.register(r'api/college', CollegeViewSet, basename="College")
+router.register(r'api/degree', DegreeeViewSet, basename="Degree")
+router.register(r'api/stream', StreamViewSet, basename="Stream")
+router.register(r'api/skill', SkillViewSet, basename="Skill")
 
 
 urlpatterns = [
@@ -35,5 +40,7 @@ urlpatterns = [
     path('api/profile', ProfileView.as_view(), name="Profile"),
     path('api/register', UserView.as_view(), name="User"),
     path("api/walkin/application", ApplicationView.as_view(), name="Application"),
+    path("api/walkin/application/<int:pk>",
+         ApplicationDetailView.as_view(), name="Application_Detail"),
     re_path(r'^', include(router.urls))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

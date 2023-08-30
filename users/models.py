@@ -91,7 +91,7 @@ class EducationalQualification(BaseModel):
 
 
 class ProfessionalQualification(BaseModel):
-    type = models.CharField(max_length=45)
+    applicant_type = models.CharField(max_length=45)
     experience = models.IntegerField(null=True, blank=True)
     current_ctc = models.CharField(blank=True, max_length=45)
     expected_ctc = models.CharField(blank=True, max_length=45)

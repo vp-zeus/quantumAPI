@@ -7,9 +7,11 @@ from rest_framework.views import APIView
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
+from users.models import Skill
 
-from users.serializers import EducationalQualificationSerializer, ProfileSerializer, UserSerializer
+from users.serializers import EducationalQualificationSerializer, ProfileSerializer, SkillSerializer, UserSerializer
 
 # Create your views here.
 
@@ -55,3 +57,8 @@ class QualificationView(APIView):
         print(education)
 
         return Response("hit")
+
+
+class SkillViewSet(ReadOnlyModelViewSet):
+    serializer_class = SkillSerializer
+    queryset = Skill.objects.all()

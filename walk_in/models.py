@@ -1,8 +1,12 @@
+from ast import Try
 from lib2to3.pytree import Base
 from django.db import models
 
 
 # Create your models here.
+
+def file_upload_to(instance, filename):
+    return 'files/{filename}'.format(filename=filename)
 
 
 class BaseModel(models.Model):
@@ -68,6 +72,12 @@ class Application(BaseModel):
         WalkIn, on_delete=models.CASCADE, related_name="applications")
     preferred_time_slot = models.ForeignKey(
         TimeSlot, on_delete=models.CASCADE, related_name="applications")
+
+    preferred_roles = models.ManyToManyField(
+        Role, related_name="applications", blank=True, null=True)
+
+    applicant_resume = models.FileField(
+        upload_to=file_upload_to, blank=True, null=True)
 
     def __str__(self):
         return self.profile.first_name

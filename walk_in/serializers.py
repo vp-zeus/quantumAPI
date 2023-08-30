@@ -18,18 +18,19 @@ class VenueSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class WalkInSerializer(serializers.ModelSerializer):
-    roles = RoleSerializer(many=True)
-    venue = VenueSerializer()
-
-    class Meta:
-        model = WalkIn
-        fields = '__all__'
-
-
 class TimeSlotSerializer(serializers.ModelSerializer):
     class Meta:
         model = TimeSlot
+        fields = '__all__'
+
+
+class WalkInSerializer(serializers.ModelSerializer):
+    roles = RoleSerializer(many=True)
+    venue = VenueSerializer()
+    available_time_slots = TimeSlotSerializer(many=True)
+
+    class Meta:
+        model = WalkIn
         fields = '__all__'
 
 
@@ -40,8 +41,16 @@ class ApplicationSerializer(serializers.ModelSerializer):
     )
     preferred_time_slot = SerializablePrimaryKeyRelatedField(
         queryset=TimeSlot.objects.all(),
-        field_serializer=TimeSlotSerializer
+        field_serializer=TimeSlotSerializer,
     )
+
+    preferred_roles = SerializablePrimaryKeyRelatedField(
+        queryset=Role.objects.all(),
+        field_serializer=RoleSerializer,
+        many=True
+    )
+
+    applicant_resume = serializers.FileField()
 
     class Meta:
         model = Application
