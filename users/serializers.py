@@ -1,4 +1,5 @@
 from dataclasses import field
+from pprint import pprint
 import profile
 from urllib import request
 from rest_framework import serializers
@@ -52,6 +53,25 @@ class ProfessionalQualificationSerializer(serializers.ModelSerializer):
     familiar_skills = SerializablePrimaryKeyRelatedField(
         queryset=Skill.objects.all(), field_serializer=SkillSerializer, many=True)
 
+    def validate(self, attrs):
+        applicant_type = attrs["applicant_type"]
+        if applicant_type == "Experienced":
+            requried_fields = (
+                "notice_period_end",
+                "experience",
+                "current_ctc",
+                "expected_ctc",
+                "on_notice_period",
+                "notice_period_duration",
+                "expert_skills"
+            )
+            for field in requried_fields:
+                if field not in attrs:
+                    raise serializers.ValidationError({
+                        field:f"The field \'{field}\' is required!"}
+                    )
+        return super().validate(attrs)
+
     class Meta:
         model = ProfessionalQualification
         exclude=['profile']
@@ -68,6 +88,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     profile_pic = serializers.ImageField()
 
     resume = serializers.FileField()
+
 
     class Meta:
         model = Profile

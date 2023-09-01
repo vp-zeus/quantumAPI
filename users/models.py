@@ -37,8 +37,8 @@ class Profile(BaseModel):
     preferred_roles = models.ManyToManyField(Role, related_name='users')
     referral = models.TextField(blank=True)
     mail_list = models.BooleanField(default=False)
-    profile_pic = models.ImageField(upload_to=upload_to, blank=True, null=True)
-    resume = models.FileField(upload_to=file_upload_to, blank=True, null=True)
+    profile_pic = models.ImageField(upload_to=upload_to, null=True)
+    resume = models.FileField(upload_to=file_upload_to, null=True)
 
     def __str__(self):
         return self.first_name
@@ -66,9 +66,9 @@ class Skill(BaseModel):
 
 
 class College(BaseModel):
-    name = models.TextField(blank=False)
-    address_line_1 = models.TextField(blank=False)
-    address_line_2 = models.TextField()
+    name = models.TextField()
+    address_line_1 = models.TextField()
+    address_line_2 = models.TextField(blank=True)
     city = models.CharField(max_length=45)
     state = models.CharField(max_length=45)
     pincode = models.CharField(max_length=45)
@@ -96,7 +96,7 @@ class ProfessionalQualification(BaseModel):
     current_ctc = models.CharField(blank=True, max_length=45)
     expected_ctc = models.CharField(blank=True, max_length=45)
     other_skills = models.TextField(blank=True)
-    on_notice_period = models.BooleanField()
+    on_notice_period = models.BooleanField(default=False)
     notice_period_end = models.DateField(blank=True, null=True)
     notice_period_duration = models.IntegerField(null=True, blank=True)
     applied_recently = models.BooleanField()
@@ -104,6 +104,6 @@ class ProfessionalQualification(BaseModel):
     profile = models.OneToOneField(
         Profile, on_delete=models.CASCADE, related_name="professional_qualification")
     expert_skills = models.ManyToManyField(
-        Skill, related_name="expert_skills", blank=True, null=True)
+        Skill, related_name="expert_skills")
     familiar_skills = models.ManyToManyField(
         Skill, related_name="familiar_skills")
