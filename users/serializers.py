@@ -1,7 +1,4 @@
-from dataclasses import field
-from pprint import pprint
-import profile
-from urllib import request
+
 from rest_framework import serializers
 from walk_in.models import Role
 from django.contrib.auth.hashers import make_password
@@ -55,6 +52,7 @@ class ProfessionalQualificationSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         applicant_type = attrs["applicant_type"]
+        applied_recently = attrs["applied_recently"]
         if applicant_type == "Experienced":
             requried_fields = (
                 "notice_period_end",
@@ -70,6 +68,14 @@ class ProfessionalQualificationSerializer(serializers.ModelSerializer):
                     raise serializers.ValidationError({
                         field:f"The field \'{field}\' is required!"}
                     )
+        if applied_recently:
+            if "applied_role" not in attrs:
+                raise serializers.ValidationError({
+                    "applied_role":"This field is required!"
+                })
+
+        
+
         return super().validate(attrs)
 
     class Meta:

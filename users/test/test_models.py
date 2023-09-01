@@ -28,7 +28,7 @@ class UserTests(APITestCase):
                     "college": 1
                 },
                 "professional_qualification": {
-                    "applicant_type": "Fresher",
+                    "applicant_type": "FRESHER",
                     "familiar_skills": [1, 2],
                     "applied_recently": False,
                 }
@@ -45,4 +45,7 @@ class UserTests(APITestCase):
             }
 
             response = self.client.post(url, data, format="multipart")
-            pprint(response.data)
+            pprint(response.data,indent=4)
+            assert response.status_code == 200
+            self.assertEqual(response.data["user"]
+                             ["email"], user_data["email"])

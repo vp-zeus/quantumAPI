@@ -6,6 +6,12 @@ from walk_in.models import Role, BaseModel
 from .managers import CustomUserManager
 
 
+APPLICANT_TYPES = [
+    ("FRESHER", "Fresher"),
+    ("EXPERIENCED", "Experienced")
+]
+
+
 def upload_to(instance, filename):
     return 'images/{filename}'.format(filename=filename)
 
@@ -91,7 +97,8 @@ class EducationalQualification(BaseModel):
 
 
 class ProfessionalQualification(BaseModel):
-    applicant_type = models.CharField(max_length=45)
+    applicant_type = models.CharField(
+        choices=APPLICANT_TYPES, max_length=45)
     experience = models.IntegerField(null=True, blank=True)
     current_ctc = models.CharField(blank=True, max_length=45)
     expected_ctc = models.CharField(blank=True, max_length=45)

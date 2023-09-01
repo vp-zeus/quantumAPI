@@ -1,8 +1,6 @@
-from ast import parse
-from cProfile import Profile
 import json
-import profile
 from django.shortcuts import render
+from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -20,18 +18,20 @@ class UserView(APIView):
     parser_classes = [MultiPartParser, FormParser]
 
     def post(self, request):
-        raw_data = request.data['raw_data']
-        parsed_data = json.loads((raw_data))
-        parsed_data["profile"]["profile_pic"] = request.data['profile_pic']
-        parsed_data["profile"]["resume"] = request.data['resume']
+        try:
+            raw_data = request.data['raw_data']
+            parsed_data = json.loads((raw_data))
+            parsed_data["profile"]["profile_pic"] = request.data['profile_pic']
+            parsed_data["profile"]["resume"] = request.data['resume']
+        except:
+            return Response({
+                "detail": "Malformed request body!"
+            }, 401)
 
-        print(parsed_data)
         serializer = UserSerializer(
             data=parsed_data, context={'data': parsed_data})
 
         serializer.is_valid()
-        print(serializer.validated_data)
-        print(serializer.errors)
         profile = serializer.save()
         response = ProfileSerializer(profile)
 
@@ -54,7 +54,6 @@ class QualificationView(APIView):
     def get(self, request):
         profile = request.user.profile
         education = profile.educational_qualification
-        print(education)
 
         return Response("hit")
 
